@@ -1,0 +1,22 @@
+- hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+    - name: Enable nginx 
+      shell: "amazon-linux-extras enable nginx1.12"
+      become: yes
+
+    - name: Install nginx
+      yum:
+        name: nginx
+        state: latest
+
+    - name: Copy index.html
+      copy:
+        src: "index.html"
+        dest: "/var/www/html/"
+
+    - name: Restart Nginx
+      service: name=nginx state=restarted
+      become: yes
